@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jasper Report Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            min-width: 200px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .data-section {
+            margin-top: 30px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .checkbox-cell {
+            text-align: center;
+        }
+
+        .checkbox-cell input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .info-box h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .selected-count {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">📊 Jasper Reports</div>
+            <div class="subtitle">Hệ thống tạo báo cáo PDF với dữ liệu thực tế</div>
+        </div>
+        
+        <div class="content">
+            <div id="status" class="status hidden"></div>
+            
+            <div class="btn-group">
+                <button id="testBtn" class="btn" onclick="testAPI()">
+                    🧪 Test API Connection
+                </button>
+                
+                <button id="loadDataBtn" class="btn" onclick="loadData()">
+                    📋 Load Sample Data
+                </button>
+                
+                <button id="generateBtn" class="btn" onclick="generateReport()">
+                    📄 Generate PDF Report
+                </button>
+            </div>
+
+            <div id="selectedCount" class="selected-count hidden">
+                Đã chọn: <span id="selectedCountText">0</span> items
+            </div>
+
+            <div id="dataSection" class="data-section hidden">
+                <h3>📋 Dữ liệu mẫu - Chọn items để xuất báo cáo:</h3>
+                <div id="dataTableContainer"></div>
+            </div>
+
+            <div class="info-box">
+                <h3>📋 Hướng dẫn sử dụng:</h3>
+                <p>1. Nhấn "Test API Connection" để kiểm tra kết nối</p>
+                <p>2. Nhấn "Load Sample Data" để tải dữ liệu mẫu</p>
+                <p>3. Chọn các items bạn muốn xuất báo cáo</p>
+                <p>4. Nhấn "Generate PDF Report" để tạo và tải xuống báo cáo</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8080/api/reports';
+        let sampleData = [];
+        let selectedItems = new Set();
+        
+        function showStatus(message, type = 'success') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.classList.remove('hidden');
+        }
+
+        function hideStatus() {
+            document.getElementById('status').classList.add('hidden');
+        }
+
+        function setButtonLoading(buttonId, isLoading) {
+            const button = document.getElementById(buttonId);
+            if (isLoading) {
+                button.innerHTML = '<span class="loading-spinner"></span>Loading...';
+                button.disabled = true;
+            } else {
+                if (buttonId === 'testBtn') {
+                    button.innerHTML = '🧪 Test API Connection';
+                } else if (buttonId === 'loadDataBtn') {
+                    button.innerHTML = '📋 Load Sample Data';
+                } else {
+                    button.innerHTML = '📄 Generate PDF Report';
+                }
+                button.disabled = false;
+            }
+        }
+
+        async function testAPI() {
+            setButtonLoading('testBtn', true);
+            hideStatus();
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/test`);
+                
+                if (response.ok) {
+                    const result = await response.text();
+                    showStatus(`✅ ${result}`, 'success');
+                } else {
+                    showStatus(`❌ API Error: ${response.status} ${response.statusText}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Connection Error: ${error.message}`, 'error');
+            } finally {
+                setButtonLoading('testBtn', false);
+            }
+        }
+
+        async function loadData() {
+            setButtonLoading('loadDataBtn', true);
+            hideStatus();
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/data`);
+                
+                if (response.ok) {
+                    sampleData = await response.json();
+                    renderDataTable();
+                    showStatus(`✅ Đã tải ${sampleData.length} items dữ liệu mẫu`, 'success');
+                } else {
+                    showStatus(`❌ Lỗi tải dữ liệu: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Lỗi kết nối: ${error.message}`, 'error');
+            } finally {
+                setButtonLoading('loadDataBtn', false);
+            }
+        }
+
+        function renderDataTable() {
+            const container = document.getElementById('dataTableContainer');
+            const dataSection = document.getElementById('dataSection');
+            
+            let tableHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th class="checkbox-cell">
+                                <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                            </th>
+                            <th>Barcode</th>
+                            <th>Customer No</th>
+                            <th>Pallet No</th>
+                            <th>Quantity</th>
+                            <th>Length</th>
+                            <th>Scan Date</th>
+                            <th>User ID</th>
+                            <th>Used</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            sampleData.forEach((item, index) => {
+                tableHTML += `
+                    <tr>
+                        <td class="checkbox-cell">
+                            <input type="checkbox" id="item_${index}" onchange="toggleItem(${index})">
+                        </td>
+                        <td>${item.barcode}</td>
+                        <td>${item.customer_no}</td>
+                        <td>${item.pallet_no}</td>
+                        <td>${item.quantity}</td>
+                        <td>${item.length}</td>
+                        <td>${item.scan_date}</td>
+                        <td>${item.user_id}</td>
+                        <td>${item.is_used ? '✅' : '❌'}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = tableHTML;
+            dataSection.classList.remove('hidden');
+            updateSelectedCount();
+        }
+
+        function toggleSelectAll() {
+            const selectAllCheckbox = document.getElementById('selectAll');
+            const isChecked = selectAllCheckbox.checked;
+            
+            sampleData.forEach((_, index) => {
+                const checkbox = document.getElementById(`item_${index}`);
+                checkbox.checked = isChecked;
+                
+                if (isChecked) {
+                    selectedItems.add(index);
+                } else {
+                    selectedItems.delete(index);
+                }
+            });
+            
+            updateSelectedCount();
+        }
+
+        function toggleItem(index) {
+            const checkbox = document.getElementById(`item_${index}`);
+            
+            if (checkbox.checked) {
+                selectedItems.add(index);
+            } else {
+                selectedItems.delete(index);
+            }
+            
+            updateSelectedCount();
+            
+            // Update select all checkbox
+            const selectAllCheckbox = document.getElementById('selectAll');
+            selectAllCheckbox.checked = selectedItems.size === sampleData.length;
+            selectAllCheckbox.indeterminate = selectedItems.size > 0 && selectedItems.size < sampleData.length;
+        }
+
+        function updateSelectedCount() {
+            const countElement = document.getElementById('selectedCountText');
+            const selectedCountDiv = document.getElementById('selectedCount');
+            
+            countElement.textContent = selectedItems.size;
+            
+            if (selectedItems.size > 0) {
+                selectedCountDiv.classList.remove('hidden');
+            } else {
+                selectedCountDiv.classList.add('hidden');
+            }
+        }
+
+        async function generateReport() {
+            if (selectedItems.size === 0) {
+                showStatus('❌ Vui lòng chọn ít nhất 1 item để xuất báo cáo', 'error');
+                return;
+            }
+
+            setButtonLoading('generateBtn', true);
+            hideStatus();
+            
+            try {
+                showStatus('🔄 Đang tạo báo cáo...', 'loading');
+                
+                // Lấy dữ liệu đã chọn
+                const selectedData = Array.from(selectedItems).map(index => sampleData[index]);
+                
+                const response = await fetch(`${API_BASE_URL}/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        parameters: {
+                            selectedData: selectedData,
+                            totalItems: selectedData.length,
+                            reportDate: new Date().toISOString()
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `barcode_report_${new Date().toISOString().split('T')[0]}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    
+                    showStatus(`✅ Báo cáo đã được tạo và tải xuống thành công! (${selectedData.length} items)`, 'success');
+                } else {
+                    const errorText = await response.text();
+                    showStatus(`❌ Lỗi tạo báo cáo: ${response.status} - ${errorText}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Lỗi kết nối: ${error.message}`, 'error');
+            } finally {
+                setButtonLoading('generateBtn', false);
+            }
+        }
+
+        // Auto test API khi trang load
+        window.addEventListener('load', () => {
+            setTimeout(testAPI, 1000);
+        });
+    </script>
+</body>
+</html> 
