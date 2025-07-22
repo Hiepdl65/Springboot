@@ -11,14 +11,14 @@
 		<property name="com.jaspersoft.studio.field.label" value="barcode"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pda_barcode_data"/>
 	</field>
-	<field name="customer_no" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="customer_no"/>
-		<property name="com.jaspersoft.studio.field.label" value="customer_no"/>
+	<field name="customerNo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="customerNo"/>
+		<property name="com.jaspersoft.studio.field.label" value="customerNo"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pda_barcode_data"/>
 	</field>
-	<field name="pallet_no" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="pallet_no"/>
-		<property name="com.jaspersoft.studio.field.label" value="pallet_no"/>
+	<field name="palletNo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="palletNo"/>
+		<property name="com.jaspersoft.studio.field.label" value="palletNo"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pda_barcode_data"/>
 	</field>
 	<field name="quantity" class="java.lang.String">
@@ -31,24 +31,24 @@
 		<property name="com.jaspersoft.studio.field.label" value="length"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pda_barcode_data"/>
 	</field>
-	<field name="scan_date" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="scan_date"/>
-		<property name="com.jaspersoft.studio.field.label" value="scan_date"/>
+	<field name="scanDate" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="scanDate"/>
+		<property name="com.jaspersoft.studio.field.label" value="scanDate"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pda_barcode_data"/>
 	</field>
-	<field name="modi_date" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="modi_date"/>
-		<property name="com.jaspersoft.studio.field.label" value="modi_date"/>
+	<field name="modiDate" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="modiDate"/>
+		<property name="com.jaspersoft.studio.field.label" value="modiDate"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pda_barcode_data"/>
 	</field>
-	<field name="user_id" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="user_id"/>
-		<property name="com.jaspersoft.studio.field.label" value="user_id"/>
+	<field name="userId" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="userId"/>
+		<property name="com.jaspersoft.studio.field.label" value="userId"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pda_barcode_data"/>
 	</field>
-	<field name="is_used" class="java.lang.Boolean">
-		<property name="com.jaspersoft.studio.field.name" value="is_used"/>
-		<property name="com.jaspersoft.studio.field.label" value="is_used"/>
+	<field name="isUsed" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.name" value="isUsed"/>
+		<property name="com.jaspersoft.studio.field.label" value="isUsed"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="pda_barcode_data"/>
 	</field>
 	<background>
@@ -57,11 +57,12 @@
 	<title>
 		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement x="300" y="20" width="258" height="40" uuid="3c3752c8-3bc1-41c5-9181-489fdb4905b4"/>
+				<reportElement x="240" y="0" width="420" height="79" uuid="3c3752c8-3bc1-41c5-9181-489fdb4905b4"/>
 				<textElement textAlignment="Center">
-					<font size="26"/>
+					<font fontName="DejaVu Sans" size="26" isBold="false" pdfEncoding=""/>
 				</textElement>
-				<text><![CDATA[REPORT]]></text>
+				<text><![CDATA[BÁO CÁO DỮ LIỆU BARCODE
+包子和小雞]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -70,17 +71,131 @@
 			<textField>
 				<reportElement x="300" y="20" width="205" height="30" uuid="f76595bd-bc6f-4f72-9097-7bb28930ffc6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12"/>
+					<font fontName="Arial Unicode MS" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Text Field"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Ngày tạo: " + new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch"/>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="30" uuid="a1b2c3d4-e5f6-7890-abcd-ef1234567890"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Barcode]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="30" uuid="b2c3d4e5-f6a7-8901-bcde-f23456789012"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Customer No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="100" height="30" uuid="c3d4e5f6-a7a8-9012-cdef-345678901234"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pallet No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="80" height="30" uuid="d4e5f6a7-a8a9-0123-def0-456789012345"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="0" width="80" height="30" uuid="e5f6a7a8-a9a0-1234-ef01-567890123456"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Length]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="460" y="0" width="100" height="30" uuid="f6a7a8a9-a0a1-2345-f012-678901234567"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Scan Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="560" y="0" width="100" height="30" uuid="a7a8a9a0-a1a2-3456-0123-789012345678"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[User ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="660" y="0" width="80" height="30" uuid="a8a9a0a1-a2a3-4567-1234-890123456789"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Used]]></text>
+			</staticText>
+		</band>
 	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch"/>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="30" uuid="a9a0a1a2-a3a4-5678-2345-901234567890"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{barcode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="30" uuid="a0a1a2a3-a4a5-6789-3456-012345678901"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{customerNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="30" uuid="a1a2a3a4-a5a6-7890-4567-123456789012"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{palletNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="80" height="30" uuid="a2a3a4a5-a6a7-8901-5678-234567890123"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="0" width="80" height="30" uuid="a3a4a5a6-a7a8-9012-6789-345678901234"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{length}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="0" width="100" height="30" uuid="a4a5a6a7-a8a9-0123-7890-456789012345"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{scanDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="560" y="0" width="100" height="30" uuid="a5a6a7a8-a9a0-1234-8901-567890123456"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{userId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="660" y="0" width="80" height="30" uuid="a6a7a8a9-a0a1-2345-9012-678901234567"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Unicode MS" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{isUsed} ? "Yes" : "No"]]></textFieldExpression>
+			</textField>
+		</band>
 	</detail>
 	<columnFooter>
 		<band height="45" splitType="Stretch"/>

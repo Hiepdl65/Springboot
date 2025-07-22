@@ -203,13 +203,19 @@
         <div class="content">
             <div id="status" class="status hidden"></div>
             
+            <div class="filter-section" style="display: flex; gap: 10px; align-items: center; margin-bottom: 20px;">
+                <input type="text" id="filterBarcode" placeholder="Barcode" style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; width: 150px;">
+                <input type="text" id="filterCustomerNo" placeholder="Customer No" style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; width: 150px;">
+                <input type="text" id="filterUserId" placeholder="User ID" style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; width: 120px;">
+                <input type="number" id="filterLimit" placeholder="Số lượng tối đa" min="1" style="padding: 10px; border-radius: 6px; border: 1px solid #ccc; width: 120px;">
+                <button id="loadDataBtn" class="btn" onclick="loadData()">
+                    📋 Load Barcode Data
+                </button>
+            </div>
+
             <div class="btn-group">
                 <button id="testBtn" class="btn" onclick="testAPI()">
                     🧪 Test API Connection
-                </button>
-                
-                <button id="loadDataBtn" class="btn" onclick="loadData()">
-                    📋 Load Sample Data
                 </button>
                 
                 <button id="generateBtn" class="btn" onclick="generateReport()">
@@ -222,14 +228,14 @@
             </div>
 
             <div id="dataSection" class="data-section hidden">
-                <h3>📋 Dữ liệu mẫu - Chọn items để xuất báo cáo:</h3>
+                <h3>📋 Dữ liệu thực tế - Chọn items để xuất báo cáo:</h3>
                 <div id="dataTableContainer"></div>
             </div>
 
             <div class="info-box">
                 <h3>📋 Hướng dẫn sử dụng:</h3>
                 <p>1. Nhấn "Test API Connection" để kiểm tra kết nối</p>
-                <p>2. Nhấn "Load Sample Data" để tải dữ liệu mẫu</p>
+                <p>2. Nhấn "Load Barcode Data" để tải dữ liệu thực tế</p>
                 <p>3. Chọn các items bạn muốn xuất báo cáo</p>
                 <p>4. Nhấn "Generate PDF Report" để tạo và tải xuống báo cáo</p>
             </div>
@@ -261,7 +267,7 @@
                 if (buttonId === 'testBtn') {
                     button.innerHTML = '🧪 Test API Connection';
                 } else if (buttonId === 'loadDataBtn') {
-                    button.innerHTML = '📋 Load Sample Data';
+                    button.innerHTML = '📋 Load Barcode Data';
                 } else {
                     button.innerHTML = '📄 Generate PDF Report';
                 }
@@ -292,14 +298,27 @@
         async function loadData() {
             setButtonLoading('loadDataBtn', true);
             hideStatus();
-            
+
+            // Lấy giá trị filter
+            const barcode = document.getElementById('filterBarcode').value.trim();
+            const customerNo = document.getElementById('filterCustomerNo').value.trim();
+            const userId = document.getElementById('filterUserId').value.trim();
+            const limit = document.getElementById('filterLimit').value.trim();
+
+            // Xây dựng query string
+            let query = [];
+            if (barcode) query.push(`barcode=${encodeURIComponent(barcode)}`);
+            if (customerNo) query.push(`customerNo=${encodeURIComponent(customerNo)}`);
+            if (userId) query.push(`userId=${encodeURIComponent(userId)}`);
+            if (limit) query.push(`limit=${encodeURIComponent(limit)}`);
+            const queryString = query.length > 0 ? `?${query.join('&')}` : '';
+
             try {
-                const response = await fetch(`${API_BASE_URL}/data`);
-                
+                const response = await fetch(`${API_BASE_URL}/barcode-data${queryString}`);
                 if (response.ok) {
                     sampleData = await response.json();
                     renderDataTable();
-                    showStatus(`✅ Đã tải ${sampleData.length} items dữ liệu mẫu`, 'success');
+                    showStatus(`✅ Đã tải ${sampleData.length} items dữ liệu thực tế`, 'success');
                 } else {
                     showStatus(`❌ Lỗi tải dữ liệu: ${response.status}`, 'error');
                 }
@@ -341,13 +360,13 @@
                             <input type="checkbox" id="item_${index}" onchange="toggleItem(${index})">
                         </td>
                         <td>${item.barcode}</td>
-                        <td>${item.customer_no}</td>
-                        <td>${item.pallet_no}</td>
+                        <td>${item.customerNo}</td>
+                        <td>${item.palletNo}</td>
                         <td>${item.quantity}</td>
                         <td>${item.length}</td>
-                        <td>${item.scan_date}</td>
-                        <td>${item.user_id}</td>
-                        <td>${item.is_used ? '✅' : '❌'}</td>
+                        <td>${item.scanDate}</td>
+                        <td>${item.userId}</td>
+                        <td>${item.isUsed ? '✅' : '❌'}</td>
                     </tr>
                 `;
             });
