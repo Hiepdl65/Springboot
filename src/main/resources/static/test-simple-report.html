@@ -1,54 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Test In Báo Cáo Đơn Giản</title>
+    <title>Test JasperReports Font</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        .button-group {
-            margin: 20px 0;
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
         }
-        button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            margin: 5px;
-            border-radius: 5px;
-            cursor: pointer;
+        .test-data {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+        .test-data h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .data-item {
+            margin: 8px 0;
+            font-family: monospace;
             font-size: 14px;
         }
-        button:hover {
-            background: #0056b3;
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
         }
-        button.success {
-            background: #28a745;
+        .test-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
         }
-        button.success:hover {
-            background: #1e7e34;
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
         }
-        button.warning {
-            background: #ffc107;
-            color: #212529;
-        }
-        button.warning:hover {
-            background: #e0a800;
+        .test-btn:active {
+            transform: translateY(0);
         }
         .status {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
         }
         .status.success {
             background: #d4edda;
@@ -60,119 +85,127 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-        .status.info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧪 Test In Báo Cáo Đơn Giản</h1>
+        <h1>🧪 Test JasperReports Font</h1>
         
-        <div class="status info">
-            <strong>Hướng dẫn:</strong> Chọn một trong các options bên dưới để test in báo cáo với font khác nhau
+        <div class="test-data">
+            <h3>📊 Dữ liệu test (với tiếng Việt và tiếng Hoa):</h3>
+            <div class="data-item">🇻🇳 Tiếng Việt: Nguyễn Văn A - àáạảãăắằặẳẵâấầậẩẫ</div>
+            <div class="data-item">🇨🇳 中文: 李明 - 你好世界 简体中文 繁體中文</div>
+            <div class="data-item">🇺🇸 English: John Smith - Hello World ABC xyz</div>
+            <div class="data-item">💰 Giá trị: 1,000,000 VNĐ | 2,000,000 CNY | 3,000,000 USD</div>
         </div>
 
-        <div class="button-group">
-            <button onclick="printReport('print')" class="success">
-                📄 In với Template Gốc (Arial Unicode MS)
-            </button>
-            
-            <button onclick="printReport('print-with-arial-unicode')" class="success">
-                📄 In với Template Fixed (Arial Unicode MS + PDF Embedding)
-            </button>
-            
-            <button onclick="printReport('print-with-default-font')" class="warning">
-                📄 In với Font Mặc Định (Không lỗi)
+        <div class="button-container">
+            <button class="test-btn" onclick="testPrint()">
+                📄 Tạo PDF với Template hiện tại
             </button>
         </div>
 
-        <div id="status"></div>
+        <div id="status" class="hidden"></div>
     </div>
 
     <script>
-        const data = [
+        // Test data với đa ngôn ngữ
+        const testData = [
             {
-                barcode: "123457",
-                customerNo: "CUST01",
-                palletNo: "PALLET01",
-                quantity: "10",
-                length: "100",
-                scanDate: "2024-06-01",
-                userId: "U001",
-                isUsed: false
+                name: "🇻🇳 Nguyễn Văn A: àáạảãăắằặẳẵâấầậẩẫ èéẹẻẽêếềệểễ",
+                value: "1,000,000 VNĐ"
             },
             {
-                barcode: "654321",
-                customerNo: "CUST02",
-                palletNo: "PALLET02",
-                quantity: "20",
-                length: "200",
-                scanDate: "2024-06-02",
-                userId: "U002",
-                isUsed: true
+                name: "🇨🇳 李明: 你好世界 简体中文测试",
+                value: "2,000,000 CNY"
             },
             {
-                barcode: "789012",
-                customerNo: "CUST03",
-                palletNo: "PALLET03",
-                quantity: "15",
-                length: "150",
-                scanDate: "2024-06-03",
-                userId: "U003",
-                isUsed: false
+                name: "🇹🇼 王小明: 繁體中文測試 包子和小雞",
+                value: "3,000,000 TWD"
+            },
+            {
+                name: "🇺🇸 John Smith: Hello World Test",
+                value: "4,000,000 USD"
             }
         ];
 
-        function showStatus(message, type = 'info') {
+        function showStatus(message, type = 'loading') {
             const statusDiv = document.getElementById('status');
-            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+            statusDiv.classList.remove('hidden');
         }
 
-        function printReport(endpoint) {
-            showStatus('🔄 Đang tạo báo cáo...', 'info');
+        function hideStatus() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.classList.add('hidden');
+        }
+
+        function testPrint() {
+            showStatus('🔄 Đang tạo PDF với template...', 'loading');
             
-            const url = `http://localhost:8080/api/simple-report/${endpoint}`;
-            
-            fetch(url, {
+            fetch('http://localhost:8080/api/simple-report/print', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: data })
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    data: testData
+                })
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                 }
                 return response.blob();
             })
             .then(blob => {
+                // Tạo link download
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                
-                // Đặt tên file theo endpoint
-                let filename = 'simple_report.pdf';
-                if (endpoint === 'print-with-arial-unicode') {
-                    filename = 'simple_report_arial_unicode.pdf';
-                } else if (endpoint === 'print-with-default-font') {
-                    filename = 'simple_report_default_font.pdf';
-                }
-                
-                a.download = filename;
+                a.download = 'jasper_test_report.pdf';
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
                 
-                showStatus(`✅ Báo cáo đã được tạo và tải xuống thành công! (${filename})`, 'success');
+                showStatus('✅ PDF đã được tạo và tải xuống thành công!', 'success');
+                
+                // Ẩn status sau 3 giây
+                setTimeout(hideStatus, 3000);
             })
-            .catch(err => {
-                console.error('Error:', err);
-                showStatus(`❌ Lỗi: ${err.message}`, 'error');
+            .catch(error => {
+                console.error('Error:', error);
+                showStatus(`❌ Lỗi: ${error.message}`, 'error');
             });
         }
+
+        // Kiểm tra server có chạy không
+        function checkServer() {
+            fetch('http://localhost:8080/api/fonts/test', {
+                method: 'GET'
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ Server đang chạy');
+                } else {
+                    throw new Error('Server không phản hồi');
+                }
+            })
+            .catch(error => {
+                console.warn('⚠️ Không thể kết nối server:', error.message);
+                showStatus('⚠️ Đảm bảo server đang chạy trên localhost:8080', 'error');
+            });
+        }
+
+        // Kiểm tra server khi load page
+        window.onload = function() {
+            setTimeout(checkServer, 1000);
+        };
     </script>
 </body>
-</html> 
+</html>
