@@ -1,7 +1,7 @@
 package com.example.jasper_report_app;
 
-import com.example.jasper_report_app.util.FontManager;
-import org.springframework.beans.factory.annotation.Autowired;
+// import com.example.jasper_report_app.util.FontManager;
+// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,14 +21,14 @@ import java.util.*;
 @CrossOrigin(origins = "*")
 public class APIReportController {
 
-    @Autowired
-    private FontManager fontManager;
+    // @Autowired
+    // private FontManager fontManager;
 
     @PostMapping("/print")
     public ResponseEntity<byte[]> printReport(@RequestBody Map<String, Object> requestBody) {
         try {
             // Đăng ký font trước khi tạo báo cáo
-            fontManager.registerFonts();
+            // fontManager.registerFonts();
             
             // Lấy dữ liệu từ request
             List<Map<String, Object>> data = (List<Map<String, Object>>) requestBody.get("data");
